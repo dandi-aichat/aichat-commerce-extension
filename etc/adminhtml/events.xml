@@ -1,0 +1,11 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="controller_action_catalog_product_save_entity_after">
+        <observer name="aichat_product_update" instance="Aichat\CommerceTemplate\Observer\Product" />
+    </event>
+    <event name="catalog_product_delete_after_done">
+        <observer name="aichat_product_delete" instance="Aichat\CommerceTemplate\Observer\Product" />
+    </event>
+    <event name="admin_system_config_changed_section_currency">
+        <observer name="aichat_currency_update_event" instance="Aichat\CommerceTemplate\Observer\CurrencySymbol" />
+    </event>
+</config>

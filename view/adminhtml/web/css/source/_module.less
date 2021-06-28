@@ -1,0 +1,12 @@
+@aichat-icons-admin__font-name-path: '@{baseDir}fonts/aichat/aichat';
+@aichat-icons-admin__font-name : 'aichat';
+.lib-font-face( 
+  @family-name:@aichat-icons-admin__font-name,
+  @font-path: @aichat-icons-admin__font-name-path,
+  @font-weight: normal,
+  @font-style: normal
+);
+.admin__menu .item-aichat.parent.level-0 > a:before {
+  font-family: @aichat-icons-admin__font-name;
+  content: "\e900";
+}

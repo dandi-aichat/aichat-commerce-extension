@@ -1,0 +1,27 @@
+<style>
+.aichat-form input[type="text"]{
+    width: 100%;
+    padding: 10px;
+}
+.aichat-form div{
+    margin-bottom: 10px;
+}
+</style>
+<form class="aichat-form" method="POST" action="<?php echo $block->getFormAction() ?>">
+    <?php echo $this->getBlockHtml('formkey')?>
+    <div>
+        <h4>Product Hook URL</h4>
+        <div>
+            <input type="text" name="product_hook_url" value="<?php echo $block->getHookConfig('product_hook_url'); ?>" />
+        </div>
+    </div>
+    <div>
+        <h4>Order Status Notification Hook URL</h4>
+        <div>
+            <input type="text" name="notification_hook_url" value="<?php echo $block->getHookConfig('notification_hook_url'); ?>" />
+        </div>
+    </div>
+    <div>
+        <input type="submit" value="Save" />
+    </div>
+</form>

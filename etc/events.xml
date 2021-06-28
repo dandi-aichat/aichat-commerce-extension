@@ -1,0 +1,20 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="checkout_onepage_controller_success_action">
+        <observer name="aichat_product_stock_check2" instance="Aichat\CommerceTemplate\Observer\StockLevel" />
+    </event>
+    <event name="sales_order_item_cancel">
+        <observer name="aichat_product_stock_check" instance="Aichat\CommerceTemplate\Observer\StockLevel" />
+    </event>
+    <event name="sales_order_save_after">
+        <observer name="aichat_sales_order_save_event" instance="Aichat\CommerceTemplate\Observer\Order" />
+    </event>
+    <event name="sales_order_delete_after">
+        <observer name="aichat_sales_order_delete_event" instance="Aichat\CommerceTemplate\Observer\Order" />
+    </event>
+    <event name="catalog_category_save_after">
+        <observer name="aichat_product_update_event" instance="Aichat\CommerceTemplate\Observer\Product" />
+    </event>
+    <event name="aichat_commercetemplate_restapi_product_update_after">
+        <observer name="aichat_product_update_restapi_event" instance="Aichat\CommerceTemplate\Observer\Product" />
+    </event>
+</config>
