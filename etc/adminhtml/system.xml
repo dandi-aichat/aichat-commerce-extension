@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="commerce" translate="label" sortOrder="130">
+            <label>Aichat</label>
+        </tab>
+        <section id="commerce" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Commerce Template</label>
+            <tab>commerce</tab>
+            <resource>Aichat_CommerceTemplate::commerce_config</resource>
+            <group id="endpoint" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Webhook Configuration</label>
+                <field id="product_endpoint" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Aichat Product Endpoint</label>
+                    <comment>Put Aichat endpoint for product webhook.</comment>
+                </field>
+                <field id="notification_endpoint" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Aichat Notification Endpoint</label>
+                    <comment>Put Aichat endpoint for notification webhook.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

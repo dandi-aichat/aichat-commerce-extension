@@ -8,6 +8,7 @@ class Checkout extends Notification implements ObserverInterface
     private $orderRepository;
 
     public function __construct(
+        \Aichat\CommerceTemplate\Helper\Data $helperData,
         \Aichat\CommerceTemplate\Model\ConfigFactory $aicConfig,
         \Magento\Framework\Serialize\Serializer\Json $json,
         \Magento\Framework\HTTP\Client\Curl $curl,
@@ -18,7 +19,7 @@ class Checkout extends Notification implements ObserverInterface
         )
     {
         $this->orderRepository = $orderRepository;
-        parent::__construct($aicConfig, $json, $curl, $logger, $quoteIdToMaskedQuoteId, $checkoutFactory);
+        parent::__construct($helperData, $aicConfig, $json, $curl, $logger, $quoteIdToMaskedQuoteId, $checkoutFactory);
     }
 
     protected function sendPayload($url, $data){

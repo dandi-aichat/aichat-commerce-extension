@@ -20,6 +20,7 @@ class StockLevel extends Notification implements ObserverInterface
     }
 
     public function __construct(
+        \Aichat\CommerceTemplate\Helper\Data $helperData,
         \Aichat\CommerceTemplate\Model\ConfigFactory $aicConfig,
         \Magento\Framework\Serialize\Serializer\Json $json,
         \Magento\Framework\HTTP\Client\Curl $curl,
@@ -32,7 +33,7 @@ class StockLevel extends Notification implements ObserverInterface
     {
         $this->getSalableQuantityDataBySku = $getSalableQuantityDataBySku;
         $this->orderRepository = $orderRepository;
-        parent::__construct($aicConfig, $json, $curl, $logger, $quoteIdToMaskedQuoteId, $checkoutFactory);
+        parent::__construct($helperData, $aicConfig, $json, $curl, $logger, $quoteIdToMaskedQuoteId, $checkoutFactory);
     }
 
     public function execute(\Magento\Framework\Event\Observer $observer)

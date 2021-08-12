@@ -5,6 +5,7 @@ use Magento\Framework\Event\ObserverInterface;
 
 class Notification
 {
+    protected $helperData;
     protected $aicConfig;
     protected $curl;
     protected $json;
@@ -13,11 +14,7 @@ class Notification
     protected $checkoutFactory;
 
     protected function getHookUrl(){
-        $collections = $this->aicConfig->create()->getCollection();
-        $collections = $collections->addFieldToFilter('config_key', 'notification_hook_url');
-        $data = $collections->getData();
-
-        return (count($data) > 0 ? array_values($data)[0]["config_value"] : false);
+        return $this->helperData->getEndpointConfig('notification_endpoint');
     }
 
     protected function isAichat($id){
@@ -68,6 +65,7 @@ class Notification
     }
 
     public function __construct(
+        \Aichat\CommerceTemplate\Helper\Data $helperData,
         \Aichat\CommerceTemplate\Model\ConfigFactory $aicConfig,
         \Magento\Framework\Serialize\Serializer\Json $json,
         \Magento\Framework\HTTP\Client\Curl $curl,
@@ -82,6 +80,7 @@ class Notification
         $this->logger = $logger;
         $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
         $this->checkoutFactory = $checkoutFactory;
+        $this->helperData = $helperData;
 
         $this->curl->setOption(CURLOPT_TIMEOUT, 3);
     }

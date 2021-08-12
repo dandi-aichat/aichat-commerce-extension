@@ -5,6 +5,7 @@ use Magento\Framework\Event\ObserverInterface;
 
 class CurrencySymbol implements ObserverInterface
 {
+    private $helperData;
     private $aicConfig;
     private $json;
     private $curl;
@@ -12,6 +13,7 @@ class CurrencySymbol implements ObserverInterface
     private $priceCurrency;
 
     public function __construct(
+        \Aichat\CommerceTemplate\Helper\Data $helperData,
         \Aichat\CommerceTemplate\Model\ConfigFactory $aicConfig,
         \Magento\Framework\Serialize\Serializer\Json $json,
         \Magento\Framework\HTTP\Client\Curl $curl,
@@ -24,16 +26,18 @@ class CurrencySymbol implements ObserverInterface
         $this->curl = $curl;
         $this->logger = $logger;
         $this->priceCurrency = $priceCurrency;
+        $this->helperData = $helperData;
 
         $this->curl->setOption(CURLOPT_TIMEOUT, 3);
     }
 
     protected function getHookUrl(){
-        $collections = $this->aicConfig->create()->getCollection();
-        $collections = $collections->addFieldToFilter('config_key', 'notification_hook_url');
-        $data = $collections->getData();
+        // $collections = $this->aicConfig->create()->getCollection();
+        // $collections = $collections->addFieldToFilter('config_key', 'notification_hook_url');
+        // $data = $collections->getData();
 
-        return (count($data) > 0 ? array_values($data)[0]["config_value"] : false);
+        // return (count($data) > 0 ? array_values($data)[0]["config_value"] : false);
+        return $this->helperData->getEndpointConfig('notification_endpoint');
     }
 
     protected function sendPayload($url, $data){

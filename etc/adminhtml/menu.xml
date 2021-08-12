@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
-    <menu>
-        <add id="Aichat_CommerceTemplate::aichat" title="Aichat" module="Aichat_CommerceTemplate" sortOrder="51" parent="Magento_Backend::system" resource="Aichat_CommerceTemplate::aichat"/>
-
-        <add id="Aichat_CommerceTemplate::webhook" title="Webhook" module="Aichat_CommerceTemplate" sortOrder="99" parent="Aichat_CommerceTemplate::aichat" action="commercetemplate/webhook/index" resource="Aichat_CommerceTemplate::webhook"/>
-    </menu>
-</config>

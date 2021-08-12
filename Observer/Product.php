@@ -4,8 +4,11 @@ namespace Aichat\CommerceTemplate\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\ScopeInterface;
 
+// WARNING: THIS CLASS UPDATE ALL OF THEIR PARENT AND SIBLINGS OF CONFIGURABLE PRODUCT
+// IT WILL SEND MULTIPLE WEBHOOK BASED ON RELATED PRODUCT NUMBERS
 class Product implements ObserverInterface
 {
+    protected $helperData;
     protected $productRepository;
     protected $resource;
     protected $json;
@@ -71,11 +74,7 @@ class Product implements ObserverInterface
     protected $_attributeColFactory;
 
     protected function getHookUrl(){
-        $collections = $this->aicConfig->create()->getCollection();
-        $collections = $collections->addFieldToFilter('config_key', 'product_hook_url');
-        $data = $collections->getData();
-
-        return (count($data) > 0 ? array_values($data)[0] : false);
+        return $this->helperData->getEndpointConfig('product_endpoint');
     }
 
     protected function sendPayload($url, $data){
@@ -118,20 +117,21 @@ class Product implements ObserverInterface
     }
 
     public function __construct(
+        \Aichat\CommerceTemplate\Helper\Data $helperData,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-      \Magento\Framework\App\ResourceConnection $resource,
-      \Magento\Framework\Serialize\Serializer\Json $json,
-      \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
-      \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-      \Magento\Store\Model\StoreManagerInterface $storeConfig,
-      \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-      \Aichat\CommerceTemplate\Model\ConfigFactory $aicConfig,
-      \Psr\Log\LoggerInterface $logger,
-      \Magento\Framework\HTTP\Client\Curl $curl,
-      \Magento\InventorySalesAdminUi\Model\GetSalableQuantityDataBySku $getSalableQuantityDataBySku,
-      \Magento\Eav\Api\AttributeSetRepositoryInterface $attributeSet,
-      \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory,
-      \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        \Magento\Framework\App\ResourceConnection $resource,
+        \Magento\Framework\Serialize\Serializer\Json $json,
+        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
+        \Magento\Directory\Model\CurrencyFactory $currencyFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Aichat\CommerceTemplate\Model\ConfigFactory $aicConfig,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\HTTP\Client\Curl $curl,
+        \Magento\InventorySalesAdminUi\Model\GetSalableQuantityDataBySku $getSalableQuantityDataBySku,
+        \Magento\Eav\Api\AttributeSetRepositoryInterface $attributeSet,
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
     )
     {
         $this->resource = $resource;
@@ -148,13 +148,13 @@ class Product implements ObserverInterface
         $this->_attributeSet = $attributeSet;
         $this->_attributeColFactory = $attributeColFactory;
         $this->productRepository = $productRepository;
+        $this->helperData = $helperData;
 
         $this->curl->setOption(CURLOPT_TIMEOUT, 3);
     }
 
-    private function sendUpdate($product, $urlData, $observer, $childProduct = FALSE){
-        if(!empty($urlData)){
-            $url = $urlData["config_value"];
+    private function sendUpdate($product, $url, $observer, $childProduct = FALSE){
+        if(!empty($url)){
             $newProduct = $product->getData();
             $oldProduct = $product->getOrigData();
 
@@ -250,7 +250,7 @@ class Product implements ObserverInterface
                         $configurableVariants[] = $pvarData;
 
                         $childProductData = $this->productRepository->get($productVar->getSku());
-                        $this->sendUpdate($childProductData, $urlData, $observer, TRUE);
+                        $this->sendUpdate($childProductData, $url, $observer, TRUE);
                     }
                     foreach($productVariantsLabel as $varLabel){
                         $variantLabel[] = $varLabel->getAttributeCode() . "=" . $varLabel->getStoreLabel();
@@ -276,9 +276,9 @@ class Product implements ObserverInterface
         // Observer execution code...
         $product = $observer->getProduct();
 
-        $urlData = $this->getHookUrl();
+        $url = $this->getHookUrl();
 
-        $this->sendUpdate($product, $urlData, $observer);
+        $this->sendUpdate($product, $url, $observer);
 
         return $this;
     }
